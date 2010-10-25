@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+  Copyright 2003 - 2009 The eFaps Team
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Author:          The eFaps Team
+  Revision:        $Rev: 5277 $
+  Last Changed:    $Date: 2010-08-15 22:04:08 -0500 (Sun, 15 Aug 2010) $
+  Last Changed By: $Author: jan.moxter $
+
+-->
+
+<install xmlns="http://www.efaps.org/xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <application>eFapsApp-LogBack</application>
+
+    <dependencies>
+        <dependency order="0">
+            <groupId>org.efaps</groupId>
+            <artifactId>efaps-kernel-install</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency order="1">
+            <groupId>org.efaps</groupId>
+            <artifactId>efaps-webapp-install</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <version number="1" login="true" reloadCache="true">
+        <description>Install complete Data Model and UI.</description>
+        <script type="groovy">
+            import org.efaps.admin.runlevel.RunLevel;
+            import org.efaps.db.Context;
+            import org.efaps.esjp.admin.ui.UIUpdate;
+            import org.efaps.importer.DataImport;
+
+            import java.net.URL
+            import java.io.File;
+
+            EFAPS_LOGGER.info("Importing Data for eFapsApp-LogBack");
+
+            RunLevel.init("shell");
+            RunLevel.execute();
+
+            <!-- LogBack_MyDesk, Admin_Common_MyDesk -->
+            UIUpdate update = new UIUpdate();
+            update.add2Menu("f8d1df8d-7470-48c6-a919-b88ada608961", "8d9aae87-fa36-4b62-aba0-dbd9c0ca273a", -1);
+
+        </script>
+    </version>
+</install>
