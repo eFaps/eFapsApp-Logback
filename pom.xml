@@ -220,12 +220,21 @@
                 <groupId>org.efaps</groupId>
                 <artifactId>maven-efaps-plugin</artifactId>
                 <version>2.0.1-7.1.6.v20100715</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate-ciclass</goal>
+                            <goal>generate-installation</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <userName>Administrator</userName>
                     <passWord>Administrator</passWord>
                     <transactionTimeout>900</transactionTimeout>
                     <!-- used from the generateUUID goal -->
                     <count>${count}</count>
+                    <ciName>logback</ciName>
                 </configuration>
                 <dependencies>
                     <!-- Connection Pooling -->
