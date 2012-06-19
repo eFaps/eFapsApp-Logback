@@ -21,7 +21,9 @@
 package org.efaps.esjp.logback;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
@@ -50,6 +52,11 @@ import ch.qos.logback.core.joran.spi.JoranException;
 public abstract class Configuration_Base
 {
     /**
+     * Session key to store the Map in the Session;
+     */
+    public final String SESSION_KEY = "org.efaps.esjp.logback.Configuration";
+
+    /**
      * Updates the LogBack Configuration.
      *
      * @param _parameter Parameter as passed from the eFaps API
@@ -57,10 +64,14 @@ public abstract class Configuration_Base
      * @throws EFapsException on error
      */
     public Return update(final Parameter _parameter)
+        throws EFapsException
     {
+        @SuppressWarnings("unchecked")
+        final Map<String, String> map = (Map<String, String>) Context.getThreadContext()
+                        .getSessionAttribute(this.SESSION_KEY);
         final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         for (final Logger logger : lc.getLoggerList()) {
-            final String value = _parameter.getParameterValue(logger.getName());
+            final String value = _parameter.getParameterValue(map.get(logger.getName()));
             if (value != null) {
                 if ("INHERITED".equalsIgnoreCase(value)) {
                     if (logger.getLevel() != null) {
@@ -75,20 +86,25 @@ public abstract class Configuration_Base
                 }
             }
         }
+        Context.getThreadContext().setSessionAttribute(this.SESSION_KEY, null);
         return new Return();
     }
 
     /**
      *  @param _parameter Parameter as passed from the eFaps API
      * @return Snipllet containgn list of loggers
+     * @throws EFapsException on error
      */
     public Return loggersFieldValue(final Parameter _parameter)
+         throws EFapsException
     {
         final Return ret = new Return();
 
         final StringBuilder html = new StringBuilder();
         final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         final List<Logger> loggerList = lc.getLoggerList();
+        final Map<String, String> map = new HashMap<String, String>();
+        Context.getThreadContext().setSessionAttribute(this.SESSION_KEY, map);
 
         html.append("<table>")
             .append("<tr><th>")
@@ -96,12 +112,15 @@ public abstract class Configuration_Base
             .append(DBProperties.getProperty("org.efaps.esjp.logback.Configuration.EffectiveLevel")).append("</th><th>")
             .append(DBProperties.getProperty("org.efaps.esjp.logback.Configuration.Level")).append("</th><th>")
             .append("</th></tr>");
+
+        int i = 0;
         for (final Logger logger : loggerList)
         {
-           html.append("<tr><td>").append(logger.getName()).append("</td><td>")
+            map.put(logger.getName(), "log" + i);
+            html.append("<tr><td>").append(logger.getName()).append("</td><td>")
                .append(logger.getEffectiveLevel().levelStr).append("</td><td>")
-               .append(getLevelDropDown(logger)).append("</td></tr>");
-
+               .append(getLevelDropDown(logger, "log" + i)).append("</td></tr>");
+           i++;
         }
         html.append("</table>");
         ret.put(ReturnValues.SNIPLETT, html.toString());
@@ -115,10 +134,11 @@ public abstract class Configuration_Base
      * @param _loggerLogger thee dropdown is wanted for
      * @return StringBuilder
      */
-    protected StringBuilder getLevelDropDown(final Logger _logger)
+    protected StringBuilder getLevelDropDown(final Logger _logger,
+                                             final String _key)
     {
         final StringBuilder ret = new StringBuilder();
-        ret.append("<select name=\"").append(_logger.getName()).append("\" size=\"1\">")
+        ret.append("<select name=\"").append(_key).append("\" size=\"1\">")
             .append("<option ").append(_logger.getLevel() == null ? "selected=\"selected\"" : "")
                     .append(" value=\"").append("INHERITED").append("\">").append("INHERITED").append("</option>");
         appendOption(ret, _logger.getLevel(), Level.ALL);
