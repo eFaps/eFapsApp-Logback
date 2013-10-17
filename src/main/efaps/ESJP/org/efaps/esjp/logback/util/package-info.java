@@ -18,10 +18,9 @@
  * Last Changed By: $Author$
  */
 /**
- * Utility for the commons Package.
+ * Utility for the logback Package.
  *
  * @author The eFaps Team
  * @version $Id$
  */
 package org.efaps.esjp.logback.util;
-

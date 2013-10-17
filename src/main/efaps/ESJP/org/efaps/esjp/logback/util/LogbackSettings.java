@@ -25,14 +25,13 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 
 /**
  * TODO comment!
- * 
+ *
  * @author The eFaps Team
- * @version $Id: SalesSettings.java 10348 2013-10-02 17:46:15Z
- *          m.aranya@moxter.net $
+ * @version $Id$
  */
 
 @EFapsUUID("8f8a4a87-f9c9-4608-b561-ed0d4c84c635")
 @EFapsRevision("$Rev$")
-public interface LogbackSettings {
-
+public interface LogbackSettings
+{
 }
