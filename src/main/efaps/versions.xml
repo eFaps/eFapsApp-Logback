@@ -47,8 +47,6 @@
             import org.efaps.admin.runlevel.RunLevel;
             import org.efaps.db.Context;
             import org.efaps.esjp.admin.ui.UIUpdate;
-            import org.efaps.importer.DataImport;
-
             import java.net.URL
             import java.io.File;
 
