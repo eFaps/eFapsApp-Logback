@@ -25,6 +25,12 @@ import java.util.UUID;
 import org.efaps.admin.common.SystemConfiguration;
 import org.efaps.util.cache.CacheReloadException;
 
+/**
+ * TODO comment!
+ *
+ * @author The eFaps Team
+ * @version $Id$
+ */
 public final class Logback
 {
 	/**
@@ -35,14 +41,14 @@ public final class Logback
 	}
 
 	/**
-	 * @return the SystemConfigruation for Sales
-	 * @throws CacheReloadException
-	 *             on error
+	 * @return the SystemConfigruation for logback
+	 * @throws CacheReloadException on error
 	 */
 	public static SystemConfiguration getSysConfig()
 			throws CacheReloadException
 			{
-		// Commons-Configuration
+
+		// logback-Configuration
 		return SystemConfiguration.get(UUID
 				.fromString("2de47719-b3ed-4396-9f92-28a2d668c022"));
 	}
