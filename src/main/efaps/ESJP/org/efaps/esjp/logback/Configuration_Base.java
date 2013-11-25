@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2010 The eFaps Team
+ * Copyright 2003 - 2013 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Class is used to configure the LogBack logger during runtime.
+ * To prevent class loading issues the class uses only reflection to
+ * access the logback classes.
  *
  * @author The eFaps Team
  * @version $Id: $
@@ -55,12 +57,24 @@ public abstract class Configuration_Base
      */
     public final String SESSION_KEY = "org.efaps.esjp.logback.Configuration";
 
+    /**
+     * Name of the LoggerContext class.
+     */
     private static String LOGGERCONTEXT = "ch.qos.logback.classic.LoggerContext";
 
+    /**
+     * Name of the LoggerContext Interface.
+     */
     private static final String CONTEXTINTERFACE = "ch.qos.logback.core.Context";
 
+    /**
+     * Name of the JoranConfigurator class.
+     */
     private static final String JORANCONFIG = "ch.qos.logback.classic.joran.JoranConfigurator";
 
+    /**
+     * Name of the Level class.
+     */
     private static final String LEVEL = "ch.qos.logback.classic.Level";
 
     /**
@@ -73,8 +87,9 @@ public abstract class Configuration_Base
     public Return update(final Parameter _parameter)
         throws EFapsException
     {
-        @SuppressWarnings("unchecked") final Map<String, String> map = (Map<String, String>) Context.getThreadContext()
-                        .getSessionAttribute(this.SESSION_KEY);
+        @SuppressWarnings("unchecked")
+        final Map<String, String> map = (Map<String, String>) Context.getThreadContext().getSessionAttribute(
+                        this.SESSION_KEY);
         final ILoggerFactory logContext = LoggerFactory.getILoggerFactory();
         if (logContext.getClass().getName().contains(Configuration_Base.LOGGERCONTEXT)) {
             try {
@@ -96,30 +111,20 @@ public abstract class Configuration_Base
                         }
                     }
                 }
-            } catch (final EFapsException e) {
-
             } catch (final NoSuchMethodException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "NoSuchMethodException", e);
             } catch (final SecurityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "SecurityException", e);
             } catch (final IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "IllegalAccessException", e);
             } catch (final IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "IllegalArgumentException", e);
             } catch (final InvocationTargetException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "InvocationTargetException", e);
             } catch (final Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "Exception", e);
             }
-
         }
-
         Context.getThreadContext().removeSessionAttribute(this.SESSION_KEY);
         return new Return();
     }
@@ -163,26 +168,18 @@ public abstract class Configuration_Base
                     i++;
                 }
                 html.append("</table>");
-            } catch (final EFapsException e) {
-
             } catch (final NoSuchMethodException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "NoSuchMethodException", e);
             } catch (final SecurityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "SecurityException", e);
             } catch (final IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "IllegalAccessException", e);
             } catch (final IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "IllegalArgumentException", e);
             } catch (final InvocationTargetException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "InvocationTargetException", e);
             } catch (final Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new EFapsException(this.getClass(), "Exception", e);
             }
         } else {
             html.append(DBProperties.getProperty(Configuration.class.getName() + ".noLogback"));
@@ -224,20 +221,20 @@ public abstract class Configuration_Base
             }
         } catch (final IOException e) {
             throw new EFapsException(this.getClass(), "load", e);
-        } catch (final ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-        } catch (final InstantiationException e) {
-            // TODO Auto-generated catch block
-        } catch (final IllegalAccessException e) {
-            // TODO Auto-generated catch block
         } catch (final NoSuchMethodException e) {
-            // TODO Auto-generated catch block
+            throw new EFapsException(this.getClass(), "NoSuchMethodException", e);
         } catch (final SecurityException e) {
-            // TODO Auto-generated catch block
+            throw new EFapsException(this.getClass(), "SecurityException", e);
+        } catch (final IllegalAccessException e) {
+            throw new EFapsException(this.getClass(), "IllegalAccessException", e);
         } catch (final IllegalArgumentException e) {
-            // TODO Auto-generated catch block
+            throw new EFapsException(this.getClass(), "IllegalArgumentException", e);
         } catch (final InvocationTargetException e) {
-            // TODO Auto-generated catch block
+            throw new EFapsException(this.getClass(), "InvocationTargetException", e);
+        } catch (final InstantiationException e) {
+            throw new EFapsException(this.getClass(), "InstantiationException", e);
+        } catch (final ClassNotFoundException e) {
+            throw new EFapsException(this.getClass(), "ClassNotFoundException", e);
         }
         return new Return();
     }
@@ -255,8 +252,8 @@ public abstract class Configuration_Base
         final StringBuilder ret = new StringBuilder();
         final Object level = getLevel(_logger);
         ret.append("<select name=\"").append(_key).append("\" size=\"1\">")
-                        .append("<option ").append(level == null ? "selected=\"selected\"" : "")
-                        .append(" value=\"").append("INHERITED").append("\">").append("INHERITED").append("</option>");
+            .append("<option ").append(level == null ? "selected=\"selected\"" : "")
+            .append(" value=\"").append("INHERITED").append("\">").append("INHERITED").append("</option>");
 
         appendOption(ret, level, getLevel4Name(_logger, "ALL"));
         appendOption(ret, level, getLevel4Name(_logger, "TRACE"));
@@ -289,6 +286,13 @@ public abstract class Configuration_Base
                 .append(_target).append("</option>");
     }
 
+    /**
+     * Get the Effective level of a logger using reflection.
+     *
+     * @param _logger logger the effective level is wanted for
+     * @return Level as object
+     * @throws Exception on error
+     */
     protected Object getEffectiveLevel(final Object _logger)
         throws Exception
     {
@@ -296,6 +300,13 @@ public abstract class Configuration_Base
         return getEffectiveLevel.invoke(_logger);
     }
 
+    /**
+     * Get the name of  a logger using reflection.
+     *
+     * @param _logger logger the effective level is wanted for
+     * @return name of the logger
+     * @throws Exception on error
+     */
     protected String logName(final Object _logger)
         throws Exception
     {
@@ -304,6 +315,13 @@ public abstract class Configuration_Base
         return ret;
     }
 
+    /**
+     * Get the level of a logger using reflection.
+     *
+     * @param _logger logger the level is wanted for
+     * @return Level as object
+     * @throws Exception on error
+     */
     protected Object getLevel(final Object _logger)
         throws Exception
     {
@@ -311,6 +329,13 @@ public abstract class Configuration_Base
         return getLevel.invoke(_logger);
     }
 
+    /**
+     * Set the level of a logger using reflection.
+     *
+     * @param _logger logger the level is set for
+     * @param _level level the level is set to
+     * @throws Exception on error
+     */
     protected void setLevel(final Object _logger,
                             final Object _level)
         throws Exception
@@ -325,6 +350,13 @@ public abstract class Configuration_Base
         setLevel.invoke(_logger, _level);
     }
 
+    /**
+     * Get a level defined by a name using reflection.
+     *
+     * @param _logger logger the level is wanted for
+     * @return Level as object
+     * @throws Exception on error
+     */
     protected Object getLevel4Name(final Object _logger,
                                    final String _name)
         throws Exception, SecurityException
@@ -334,6 +366,13 @@ public abstract class Configuration_Base
         return toLevel.invoke(null, _name);
     }
 
+    /**
+     * Get the integer value of level by using reflection.
+     *
+     * @param _level _level the integer value is wanted for
+     * @return Level as object
+     * @throws Exception on error
+     */
     protected Integer getLevelInt(final Object _level)
         throws Exception
     {
