@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2013 The eFaps Team
+ * Copyright 2003 - 2015 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 package org.efaps.esjp.logback;
@@ -25,6 +22,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +30,10 @@ import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Context;
+import org.efaps.esjp.ui.html.Table;
 import org.efaps.util.EFapsException;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
@@ -45,10 +44,9 @@ import org.slf4j.LoggerFactory;
  * access the logback classes.
  *
  * @author The eFaps Team
- * @version $Id: $
  */
 @EFapsUUID("6ada2f30-c358-4fc4-b611-3c33530ac467")
-@EFapsRevision("$Rev: 5276 $")
+@EFapsApplication("eFapsApp-Logback")
 public abstract class Configuration_Base
 {
 
@@ -148,26 +146,25 @@ public abstract class Configuration_Base
                 final Map<String, String> map = new HashMap<String, String>();
                 Context.getThreadContext().setSessionAttribute(this.SESSION_KEY, map);
 
-                html.append("<table>")
-                        .append("<tr><th>")
-                        .append(DBProperties.getProperty("org.efaps.esjp.logback.Configuration.LoggerName"))
-                        .append("</th><th>")
-                        .append(DBProperties.getProperty("org.efaps.esjp.logback.Configuration.EffectiveLevel"))
-                        .append("</th><th>")
-                        .append(DBProperties.getProperty("org.efaps.esjp.logback.Configuration.Level"))
-                        .append("</th><th>")
-                        .append("</th></tr>");
+                final Table table = new Table();
+                table.addRow()
+                    .addHeaderColumn(DBProperties.getProperty("org.efaps.esjp.logback.Configuration.LoggerName"))
+                    .addHeaderColumn(DBProperties.getProperty("org.efaps.esjp.logback.Configuration.EffectiveLevel"))
+                    .addHeaderColumn(DBProperties.getProperty("org.efaps.esjp.logback.Configuration.Level"))
+                    .addHeaderColumn(DBProperties.getProperty("org.efaps.esjp.logback.Configuration.Appender"));
+
                 int i = 0;
                 for (final Object logger : loggerList)
                 {
                     final String name = logName(logger);
                     map.put(name, "log" + i);
-                    html.append("<tr><td>").append(name).append("</td><td>")
-                            .append(getEffectiveLevel(logger)).append("</td><td>")
-                            .append(getLevelDropDown(logger, "log" + i)).append("</td></tr>");
+                    table.addRow().addColumn(name)
+                        .addColumn(String.valueOf(getEffectiveLevel(logger)))
+                        .addColumn(getLevelDropDown(logger, "log" + i))
+                        .addColumn(getAppenderName(logger));
                     i++;
                 }
-                html.append("</table>");
+                html.append(table.toHtml());
             } catch (final NoSuchMethodException e) {
                 throw new EFapsException(this.getClass(), "NoSuchMethodException", e);
             } catch (final SecurityException e) {
@@ -237,6 +234,28 @@ public abstract class Configuration_Base
             throw new EFapsException(this.getClass(), "ClassNotFoundException", e);
         }
         return new Return();
+    }
+
+
+    /**
+     * Get the name of the appender using reflection.
+     *
+     * @param _logger logger the effective level is wanted for
+     * @return name of the logger
+     * @throws Exception on error
+     */
+    protected String getAppenderName(final Object _logger)
+        throws Exception
+    {
+        final StringBuilder ret = new StringBuilder();
+        final Method iteratorForAppenders = _logger.getClass().getMethod("iteratorForAppenders");
+        final Iterator<?> iter = (Iterator<?>) iteratorForAppenders.invoke(_logger);
+        while (iter.hasNext()) {
+            final Object appender = iter.next();
+            final Method getName = appender.getClass().getMethod("getName");
+            ret.append(getName.invoke(appender));
+        }
+        return ret.toString();
     }
 
     /**
