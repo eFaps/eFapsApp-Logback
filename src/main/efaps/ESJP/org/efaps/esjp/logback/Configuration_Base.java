@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2015 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class is used to configure the LogBack logger during runtime.
+ * Class is used to configure the Logback logger during runtime.
  * To prevent class loading issues the class uses only reflection to
  * access the logback classes.
  *
@@ -76,7 +76,7 @@ public abstract class Configuration_Base
     private static final String LEVEL = "ch.qos.logback.classic.Level";
 
     /**
-     * Updates the LogBack Configuration.
+     * Updates the Logback Configuration.
      *
      * @param _parameter Parameter as passed from the eFaps API
      * @return new empty Return
@@ -186,8 +186,8 @@ public abstract class Configuration_Base
     }
 
     /**
-     * Loads a LogBack Configuration file and parses it using the
-     * JoranConfigurater from LogBack. Resets the Logging Context and configures
+     * Loads a Logback Configuration file and parses it using the
+     * JoranConfigurater from Logback. Resets the Logging Context and configures
      * a new one from the given file.
      *
      * @param _parameter Parameter as passed from the eFaps API

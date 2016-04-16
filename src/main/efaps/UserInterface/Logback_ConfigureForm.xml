@@ -2,7 +2,7 @@
 
 <!--
 
-  Copyright 2003 - 2010 The eFaps Team
+  Copyright 2003 - 2016 The eFaps Team
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -28,12 +28,12 @@
          xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
 
     <uuid>9b89d238-b99b-43aa-82cc-ff5de77d764e</uuid>
-    <file-application>eFapsApp-LogBack</file-application>
+    <file-application>eFapsApp-Logback</file-application>
     <file-revision>$Rev: 5277 $</file-revision>
 
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>LogBack_ConfigureForm</name>
+        <name>Logback_ConfigureForm</name>
         <!-- fields -->
         <field name="loggers">
             <property name="ModeCreate">READONLY</property>
@@ -42,7 +42,7 @@
             <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
             <trigger program="org.efaps.esjp.logback.Configuration"
                 method="loggersFieldValue"
-                name="LogBack_ConfigureForm.loggers.UI_FIELD_VALUE"
+                name="Logback_ConfigureForm.loggers.UI_FIELD_VALUE"
                 event="UI_FIELD_VALUE"/>
         </field>
     </definition>

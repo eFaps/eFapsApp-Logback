@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2010 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 package org.efaps.esjp.logback;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 /**
  * This class must be replaced for customization, therefore it is left empty.
  * Functional description can be found in the related "<code>_base</code>"
  * class.
- * 
+ *
  * @author The eFaps Team
- * @version $Id: Ticket.java 5276 2010-08-16 02:53:04Z jan.moxter $
  */
 @EFapsUUID("43e03c62-d803-444c-9459-6f016ec90a6f")
-@EFapsRevision("$Rev: 5276 $")
-public class Configuration extends Configuration_Base {
+@EFapsApplication("eFapsApp-Logback")
+public class Configuration
+    extends Configuration_Base
+{
 
 }

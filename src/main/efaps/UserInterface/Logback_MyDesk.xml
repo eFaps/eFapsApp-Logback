@@ -2,7 +2,7 @@
 
 <!--
 
- Copyright 2003 - 2010 The eFaps Team
+ Copyright 2003 - 2016 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -16,26 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- Author:          The eFaps Team
- Revision:        $Rev: 5277 $
- Last Changed:    $Date: 2010-08-15 22:04:08 -0500 (Sun, 15 Aug 2010) $
- Last Changed By: $Author: jan.moxter $
-
 -->
 
-<ui-menu xmlns="http://www.efaps.org/xsd"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-
+<ui-menu xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>f8d1df8d-7470-48c6-a919-b88ada608961</uuid>
-    <file-application>eFapsApp-LogBack</file-application>
-    <file-revision>$Rev: 5277 $</file-revision>
+    <file-application>eFapsApp-Logback</file-application>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>LogBack_MyDesk</name>
+        <name>Logback_MyDesk</name>
         <childs>
-            <child>LogBack_Configure</child>
-            <child>LogBack_LoadConfiguration</child>
+            <child>Logback_Configure</child>
+            <child>Logback_LoadConfiguration</child>
         </childs>
     </definition>
 </ui-menu>
