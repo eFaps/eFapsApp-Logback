@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
   Copyright 2003 - 2016 The eFaps Team
@@ -16,34 +15,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Author:          The eFaps Team
-  Revision:        $Rev: 5277 $
-  Last Changed:    $Date: 2010-08-15 22:04:08 -0500 (Sun, 15 Aug 2010) $
-  Last Changed By: $Author: jan.moxter $
-
 -->
 
-<ui-form xmlns="http://www.efaps.org/xsd"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-
+<ui-form xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>9b89d238-b99b-43aa-82cc-ff5de77d764e</uuid>
     <file-application>eFapsApp-Logback</file-application>
-    <file-revision>$Rev: 5277 $</file-revision>
-
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Logback_ConfigureForm</name>
-        <!-- fields -->
         <field name="loggers">
             <property name="ModeCreate">READONLY</property>
             <property name="ModeEdit">NONE</property>
             <property name="HideLabel">true</property>
-            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
-            <trigger program="org.efaps.esjp.logback.Configuration"
-                method="loggersFieldValue"
-                name="Logback_ConfigureForm.loggers.UI_FIELD_VALUE"
-                event="UI_FIELD_VALUE"/>
+            <property name="UIType">SNIPPLET</property>
+            <trigger program="org.efaps.esjp.logback.Configuration" method="loggersFieldValue"
+                name="Logback_ConfigureForm.loggers.UI_FIELD_VALUE" event="UI_FIELD_VALUE" />
         </field>
     </definition>
 </ui-form>
