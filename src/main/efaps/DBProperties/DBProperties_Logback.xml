@@ -21,6 +21,7 @@
 <dbproperties xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>5a98a14a-51c0-4016-b944-e81ebdc7251f</uuid>
+    <file-application>eFapsApp-Logback</file-application>
     <bundle name="eFapsApp-Logback" sequence="1" />
     <resource>
         <type>Properties</type>
