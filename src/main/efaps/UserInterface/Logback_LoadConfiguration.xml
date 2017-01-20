@@ -34,5 +34,6 @@
         </target>
         <property name="Target">modal</property>
         <property name="TargetMode">create</property>
+        <property name="NoUpdateAfterCOMMAND">true</property>
     </definition>
 </ui-command>

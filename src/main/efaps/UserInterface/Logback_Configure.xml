@@ -35,5 +35,6 @@
         <property name="TargetMode">create</property>
         <property name="WindowHeight">600</property>
         <property name="WindowWidth">1000</property>
+        <property name="NoUpdateAfterCOMMAND">true</property>
     </definition>
 </ui-command>
