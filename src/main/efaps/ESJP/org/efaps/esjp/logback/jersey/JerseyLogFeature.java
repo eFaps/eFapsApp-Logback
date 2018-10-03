@@ -44,7 +44,7 @@ public class JerseyLogFeature
     {
         final JerseyLogFilter filter = new JerseyLogFilter();
         if (getLogger() != null) {
-            filter.setLogger(getLogger());
+            filter.setLogger(filter.getLogger());
         }
         _context.register(filter);
         return true;
