@@ -29,5 +29,8 @@
             <child>Logback_Configure</child>
             <child>Logback_LoadConfiguration</child>
         </childs>
+        <parents>
+	  <parent>Logback_MyDesk</parent>
+	</parents>
     </definition>
 </ui-menu>
