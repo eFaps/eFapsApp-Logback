@@ -55,14 +55,15 @@ public class JerseyLogFilter
     private Logger logger;
 
     @Override
-    public void filter(final ClientRequestContext _inRequestContext)
+    public void filter(final ClientRequestContext _requestContext)
         throws IOException
     {
         if (!isLoggingEnabled()) {
             return;
         }
-        final String msg = String.format("Executing %s on %s, headers: %s", _inRequestContext.getMethod(),
-                        _inRequestContext.getUri(), _inRequestContext.getStringHeaders());
+        final String msg = String.format("Executing %s on %s, headers: %s, \nBody: %s", _requestContext.getMethod(),
+                        _requestContext.getUri(), _requestContext.getStringHeaders(),
+                        _requestContext.getEntity());
         logMessage(msg);
     }
 
@@ -123,11 +124,11 @@ public class JerseyLogFilter
         if (!_inBodyInputStream.markSupported()) {
             theResultEntityStream = new BufferedInputStream(_inBodyInputStream);
         }
-        theResultEntityStream.mark(this.mMaxBodySize + 1);
-        final byte[] theEntityBytes = new byte[this.mMaxBodySize + 1];
+        theResultEntityStream.mark(mMaxBodySize + 1);
+        final byte[] theEntityBytes = new byte[mMaxBodySize + 1];
         final int theEntitySize = theResultEntityStream.read(theEntityBytes);
-        _inLogMessageStringBuilder.append(new String(theEntityBytes, 0, Math.min(theEntitySize, this.mMaxBodySize)));
-        if (theEntitySize > this.mMaxBodySize) {
+        _inLogMessageStringBuilder.append(new String(theEntityBytes, 0, Math.min(theEntitySize, mMaxBodySize)));
+        if (theEntitySize > mMaxBodySize) {
             _inLogMessageStringBuilder.append(" [additional data truncated]");
         }
         theResultEntityStream.reset();
@@ -167,10 +168,10 @@ public class JerseyLogFilter
     public Logger getLogger()
     {
         final Logger ret;
-        if (this.logger == null) {
+        if (logger == null) {
             ret = LOGGER;
         } else {
-            ret = this.logger;
+            ret = logger;
         }
         return ret;
     }
@@ -183,7 +184,7 @@ public class JerseyLogFilter
      */
     public JerseyLogFilter setLogger(final Logger _logger)
     {
-        this.logger = _logger;
+        logger = _logger;
         return this;
     }
 }
