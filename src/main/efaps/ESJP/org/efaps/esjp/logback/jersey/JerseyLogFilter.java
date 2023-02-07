@@ -61,7 +61,7 @@ public class JerseyLogFilter
         if (!isLoggingEnabled()) {
             return;
         }
-        final String msg = String.format("Executing %s on %s, headers: %s, \nBody: %s", _requestContext.getMethod(),
+        final String msg = String.format("Executing %s on %s,\nheaders: %s,\nBody: %s", _requestContext.getMethod(),
                         _requestContext.getUri(), _requestContext.getStringHeaders(),
                         _requestContext.getEntity());
         logMessage(msg);
@@ -79,7 +79,7 @@ public class JerseyLogFilter
         if (_responseContext.hasEntity()) {
             _responseContext.setEntityStream(logMessageBodyInputStream(bodyMsg, _responseContext.getEntityStream()));
         }
-        final String msg = String.format("Response status: %s %s,\nHeaders: %s, \nBody: %s",
+        final String msg = String.format("Response status: %s %s,\nHeaders: %s,\nBody: %s",
                        _responseContext.getStatus(), _responseContext.getStatusInfo(),
                        _responseContext.getHeaders(), bodyMsg);
         logMessage(msg);
