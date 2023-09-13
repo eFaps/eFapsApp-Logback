@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
 
  Copyright 2003 - 2023 The eFaps Team
 
@@ -17,25 +15,13 @@
  limitations under the License.
 
 -->
-<ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<ui-module xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>1a783c54-32fe-481f-8fe9-b1fed3086c64</uuid>
+    <uuid>c6e6ff11-067d-4c1c-bd6a-3a6896bfeffd</uuid>
     <file-application>eFapsApp-Logback</file-application>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Logback_Configure</name>
-        <access>
-            <role>Administration</role>
-        </access>
-        <target>
-            <module>Logback_ConfigureModule</module>
-            <form>Logback_ConfigureForm</form>
-            <execute program="org.efaps.esjp.logback.Configuration" method="update" />
-        </target>
-        <property name="Target">modal</property>
-        <property name="TargetMode">create</property>
-        <property name="WindowHeight">600</property>
-        <property name="WindowWidth">1000</property>
-        <property name="NoUpdateAfterCOMMAND">true</property>
+        <name>Logback_ConfigureModule</name>
+        <property name="ModuleKey">Logback</property>
     </definition>
-</ui-command>
+</ui-module>
