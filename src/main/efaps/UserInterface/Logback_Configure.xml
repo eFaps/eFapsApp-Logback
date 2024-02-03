@@ -17,7 +17,7 @@
 
 -->
 <ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.2.xsd">
     <uuid>1a783c54-32fe-481f-8fe9-b1fed3086c64</uuid>
     <file-application>eFapsApp-Logback</file-application>
     <definition>
