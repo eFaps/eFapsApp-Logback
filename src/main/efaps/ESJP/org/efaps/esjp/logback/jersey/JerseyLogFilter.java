@@ -18,6 +18,7 @@ package org.efaps.esjp.logback.jersey;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
@@ -51,6 +52,8 @@ public class JerseyLogFilter
     /** The logger. */
     private Logger logger;
 
+    private long requestStartTime;
+
     @Override
     public void filter(final ClientRequestContext _requestContext)
         throws IOException
@@ -58,6 +61,7 @@ public class JerseyLogFilter
         if (!isLoggingEnabled()) {
             return;
         }
+        requestStartTime = System.nanoTime();
         final String msg = String.format("Executing %s on %s,\nheaders: %s,\nBody: %s", _requestContext.getMethod(),
                         _requestContext.getUri(), _requestContext.getStringHeaders(),
                         _requestContext.getEntity());
@@ -76,9 +80,11 @@ public class JerseyLogFilter
         if (_responseContext.hasEntity()) {
             _responseContext.setEntityStream(logMessageBodyInputStream(bodyMsg, _responseContext.getEntityStream()));
         }
-        final String msg = String.format("Response status: %s %s,\nHeaders: %s,\nBody: %s",
+        final long requestFinishTime = System.nanoTime();
+        final long duration = requestFinishTime - requestStartTime;
+        final String msg = String.format("Response status: %s %s, Duration: %sms, \nHeaders: %s,\nBody: %s",
                        _responseContext.getStatus(), _responseContext.getStatusInfo(),
-                       _responseContext.getHeaders(), bodyMsg);
+                       TimeUnit.NANOSECONDS.toMillis(duration), _responseContext.getHeaders(), bodyMsg);
         logMessage(msg);
     }
 
