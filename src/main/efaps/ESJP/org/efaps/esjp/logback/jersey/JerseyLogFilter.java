@@ -25,11 +25,12 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.slf4j.MDC;
 /**
  * Possibility to log Jersey.
  *
@@ -54,6 +55,8 @@ public class JerseyLogFilter
 
     private long requestStartTime;
 
+
+
     @Override
     public void filter(final ClientRequestContext _requestContext)
         throws IOException
@@ -61,6 +64,8 @@ public class JerseyLogFilter
         if (!isLoggingEnabled()) {
             return;
         }
+        final String generatedString = RandomStringUtils.randomAlphanumeric(20);
+        MDC.put("client-requestId", generatedString);
         requestStartTime = System.nanoTime();
         final String msg = String.format("Executing %s on %s,\nheaders: %s,\nBody: %s", _requestContext.getMethod(),
                         _requestContext.getUri(), _requestContext.getStringHeaders(),
@@ -86,6 +91,7 @@ public class JerseyLogFilter
                        _responseContext.getStatus(), _responseContext.getStatusInfo(),
                        TimeUnit.NANOSECONDS.toMillis(duration), _responseContext.getHeaders(), bodyMsg);
         logMessage(msg);
+        MDC.remove("client-requestId");
     }
 
     /**
