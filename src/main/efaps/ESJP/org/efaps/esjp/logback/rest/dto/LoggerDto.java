@@ -15,6 +15,8 @@
  */
 package org.efaps.esjp.logback.rest.dto;
 
+import java.io.Serializable;
+
 import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
@@ -23,9 +25,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(builder = LoggerDto.Builder.class)
 @EFapsUUID("db87e680-c863-48df-a61e-32bdc3cbcf9e")
 @EFapsApplication("eFapsApp-Logback")
-public class LoggerDto
+public class LoggerDto implements Serializable
 {
 
+    private static final long serialVersionUID = 1L;
     private final String name;
     private final String appender;
     private final String level;

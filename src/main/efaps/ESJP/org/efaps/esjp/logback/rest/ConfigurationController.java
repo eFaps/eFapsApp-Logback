@@ -15,16 +15,24 @@
  */
 package org.efaps.esjp.logback.rest;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.efaps.admin.program.esjp.EFapsApplication;
+import org.efaps.admin.program.esjp.EFapsListener;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.cluster.ClusterCommunication;
+import org.efaps.cluster.IClusterMsgListener;
+import org.efaps.cluster.StreamableWrapper;
 import org.efaps.esjp.logback.rest.dto.LoggerDto;
 import org.efaps.util.EFapsException;
+import org.jgroups.JChannel;
+import org.jgroups.ObjectMessage;
 import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
@@ -39,9 +47,12 @@ import jakarta.ws.rs.core.Response;
 @EFapsUUID("b288b652-30e7-4eaa-b51e-3ffbbf93281f")
 @EFapsApplication("eFapsApp-Logback")
 @Path("/logback/configuration")
+@EFapsListener
 public class ConfigurationController
+    implements IClusterMsgListener
 {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationController.class);
     private static String LOGGERCONTEXT = "ch.qos.logback.classic.LoggerContext";
     private static final String LEVEL = "ch.qos.logback.classic.Level";
 
@@ -69,8 +80,7 @@ public class ConfigurationController
                                     .build());
                 }
             } catch (final Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOG.error("Catched", e);
             }
         }
         return Response.ok(loggers).build();
@@ -91,6 +101,7 @@ public class ConfigurationController
                     } else {
                         setLevel(logger, getLevel4Name(logger, dto.getLevel()));
                     }
+                    inform(dto);
                 }
             } catch (final Exception e) {
                 // TODO Auto-generated catch block
@@ -168,4 +179,45 @@ public class ConfigurationController
         setLevel.invoke(logger, level);
     }
 
+    protected void inform(final LoggerDto dto)
+        throws Exception
+    {
+        final JChannel channel = ClusterCommunication.getChannel();
+        if (channel != null) {
+            final var msg = new ObjectMessage();
+
+            final var object = new StreamableWrapper(dto);
+            msg.setObject(object);
+            channel.send(msg);
+        }
+    }
+
+    @Override
+    public int getWeight()
+    {
+        return 0;
+    }
+
+    @Override
+    public boolean onPayload(final Serializable obj)
+    {
+        LOG.info("payload: {}", obj);
+        if (obj instanceof final LoggerDto dto) {
+            LOG.info("received loggerDto: {}", dto);
+            try {
+                final var logger = getLogger(dto.getName());
+                if (logger != null) {
+                    if (StringUtils.isEmpty(dto.getLevel())) {
+                        setLevel(logger, null);
+                    } else {
+                        setLevel(logger, getLevel4Name(logger, dto.getLevel()));
+                    }
+                }
+            } catch (final Exception e) {
+                LOG.error("Catched", e);
+            }
+            return true;
+        }
+        return false;
+    }
 }
