@@ -28,6 +28,7 @@ import javax.ws.rs.client.ClientResponseFilter;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.esjp.common.serialization.SerializationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -58,18 +59,19 @@ public class JerseyLogFilter
 
 
     @Override
-    public void filter(final ClientRequestContext _requestContext)
+    public void filter(final ClientRequestContext requestContext)
         throws IOException
     {
         if (!isLoggingEnabled()) {
             return;
         }
-        final String generatedString = RandomStringUtils.randomAlphanumeric(20);
+        final String generatedString = RandomStringUtils.secure().nextAlphanumeric(20);
         MDC.put("client-requestId", generatedString);
         requestStartTime = System.nanoTime();
-        final String msg = String.format("Executing %s on %s,\nheaders: %s,\nBody: %s", _requestContext.getMethod(),
-                        _requestContext.getUri(), _requestContext.getStringHeaders(),
-                        _requestContext.getEntity());
+        final var body = SerializationUtil.getObjectMapper().writeValueAsString(requestContext.getEntity());
+
+        final String msg = String.format("Executing %s on %s,\nheaders: %s,\nBody: %s", requestContext.getMethod(),
+                        requestContext.getUri(), requestContext.getStringHeaders(), body);
         logMessage(msg);
     }
 
