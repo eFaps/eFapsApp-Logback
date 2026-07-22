@@ -216,8 +216,8 @@ public class ConfigurationController
             } catch (final Exception e) {
                 LOG.error("Catched", e);
             }
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 }
